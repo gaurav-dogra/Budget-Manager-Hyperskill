@@ -1,8 +1,7 @@
 package budget;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.List;
 
 public class Save {
 
@@ -12,10 +11,14 @@ public class Save {
         this.file = new File(file);
     }
 
-    public void save(String purchases) throws IOException {
+    public void save(List<String> textToFile) throws IOException {
         file.createNewFile();
-        FileWriter fileWriter = new FileWriter(file.getName());
-        fileWriter.write(purchases);
-        fileWriter.close();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+        for (String line: textToFile) {
+            writer.write(line);
+            writer.newLine();
+        }
+        writer.close();
     }
 }

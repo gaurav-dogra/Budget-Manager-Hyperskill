@@ -81,31 +81,39 @@ public class App {
         try {
             loader = new Loader(FILE_NAME);
             this.balance = loader.getBalance();
+            this.foodPurchases = loader.get(ItemType.FOOD);
+            this.clothesPurchases = loader.get(ItemType.CLOTHES);
+            this.entertainmentPurchases = loader.get(ItemType.ENTERTAINMENT);
+            this.otherPurchases = loader.get(ItemType.OTHER);
         } catch (IOException e) {
             System.out.println("Error reading from the file: " + FILE_NAME);
             e.printStackTrace();
-            return;
         }
-
-        this.foodPurchases = loader.get(ItemType.FOOD);
-        this.clothesPurchases = loader.get(ItemType.CLOTHES);
-        this.entertainmentPurchases = loader.get(ItemType.ENTERTAINMENT);
-        this.otherPurchases = loader.get(ItemType.OTHER);
     }
 
     private void save() {
 
         Save data = new Save(FILE_NAME);
-        StringBuilder currentData = new StringBuilder();
+        List<String> textToFile = new ArrayList<>();
+        textToFile.add(String.valueOf(balance));
+        if (!foodPurchases.isEmpty()) {
+            textToFile.add("FOOD " + foodPurchases.toString());
+        }
 
-        currentData.append(balance).append("\r\n");
-        currentData.append(saveToFile(foodPurchases, "FOOD")).append("\r\n");
-        currentData.append(saveToFile(clothesPurchases, "CLOTHES")).append("\r\n");
-        currentData.append(saveToFile(entertainmentPurchases, "ENTERTAINMENT")).append("\r\n");
-        currentData.append(saveToFile(otherPurchases, "OTHER")).append("\r\n");
+        if (!clothesPurchases.isEmpty()) {
+            textToFile.add("CLOTHES " + clothesPurchases.toString());
+        }
+
+        if (!entertainmentPurchases.isEmpty()) {
+            textToFile.add("ENTERTAINMENT " + entertainmentPurchases.toString());
+        }
+
+        if (!otherPurchases.isEmpty()) {
+            textToFile.add("OTHER " + otherPurchases.toString());
+        }
 
         try {
-            data.save(currentData.toString());
+            data.save(textToFile);
         } catch (IOException e) {
             System.out.println("Error saving in the file");
             e.printStackTrace();
@@ -114,18 +122,14 @@ public class App {
         System.out.println("\nPurchases were saved!");
     }
 
-    private String saveToFile(List<Item> purchaseList, String type) {
-        if (purchaseList.isEmpty()) {
-            return "";
-        }
+    private String saveList(List<Item> purchaseList, String type) {
 
         StringBuilder returnString = new StringBuilder(type);
-        returnString.append(" \n\r");
         for (Item item : purchaseList) {
             returnString.append(item.getName()).append(":").append(item.getPrice()).append(", ");
         }
 
-        return returnString.toString().substring(0, returnString.length() - 2);
+        return returnString.substring(0, returnString.length() - 2);
     }
 
     private void addIncome() {

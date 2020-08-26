@@ -3,40 +3,32 @@ package budget;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Loader {
-    private final File file;
-    private final List<String> content;
+    String file;
+    double balance;
+    List<String> content = new ArrayList<>();
 
     public Loader(String file_name) throws IOException {
-        file = new File(file_name);
-        content = Files.readAllLines(file.toPath());
+        this.file = file_name;
+        content = Files.readAllLines(Paths.get(file));
+        System.out.println("content size = " + content.size());
     }
 
     public double getBalance() {
-        return Double.parseDouble(content.get(0));
+        return 0;
     }
 
-    public List<Item> get(ItemType iType) {
-        String listType = iType.toString();
-        List<Item> returnList = new ArrayList<>();
-        for (String line : content) {
-            if (line.startsWith(listType)) {
-                line = line.replace(listType, "");
-                line = line.replaceAll("[\\[\\]$]", "");
-                StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
-                while (stringTokenizer.hasMoreTokens()) {
-                    String  values = stringTokenizer.nextToken().trim();
-                    String item = values.split(" : ")[0];
-                    double price = Double.parseDouble(values.split(" : ")[1]);
-                    returnList.add(new Item(item, price));
-                }
-            }
+    public List<Item> get(ItemType iType) throws IOException {
+        Scanner scanner = new Scanner(new File(file));
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            System.out.println(line);
         }
-        return returnList;
+        return null;
     }
 }
