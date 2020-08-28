@@ -29,7 +29,7 @@ public class App {
             "4) Other\n" +
             "5) Back";
 
-    private final String purchaseTypesWithAll = "Choose the type of purchases\n" +
+    private final String purchaseTypesWithAllOption = "Choose the type of purchases\n" +
             "1) Food\n" +
             "2) Clothes\n" +
             "3) Entertainment\n" +
@@ -82,13 +82,18 @@ public class App {
             loader = new Loader(FILE_NAME);
             this.balance = loader.getBalance();
             this.foodPurchases = loader.get(ItemType.FOOD);
+//            System.out.println("foodPurchases = " + foodPurchases);
             this.clothesPurchases = loader.get(ItemType.CLOTHES);
+//            System.out.println("clothesPurchases = " + clothesPurchases);
             this.entertainmentPurchases = loader.get(ItemType.ENTERTAINMENT);
+//            System.out.println("entertainmentPurchases = " + entertainmentPurchases);
             this.otherPurchases = loader.get(ItemType.OTHER);
+//            System.out.println("otherPurchases = " + otherPurchases);
         } catch (IOException e) {
             System.out.println("Error reading from the file: " + FILE_NAME);
             e.printStackTrace();
         }
+        System.out.println("\nPurchases were loaded!");
     }
 
     private void save() {
@@ -122,16 +127,6 @@ public class App {
         System.out.println("\nPurchases were saved!");
     }
 
-    private String saveList(List<Item> purchaseList, String type) {
-
-        StringBuilder returnString = new StringBuilder(type);
-        for (Item item : purchaseList) {
-            returnString.append(item.getName()).append(":").append(item.getPrice()).append(", ");
-        }
-
-        return returnString.substring(0, returnString.length() - 2);
-    }
-
     private void addIncome() {
         System.out.println("\nEnter income:");
         double income = scanner.nextDouble();
@@ -160,7 +155,7 @@ public class App {
         String item = scanner.nextLine();
         System.out.println("Enter its price:");
         double price = scanner.nextDouble();
-
+        scanner.nextLine();
         switch (input) {
             case 1:
                 foodPurchases.add(new Item(item, price));
@@ -186,11 +181,12 @@ public class App {
             System.out.println("\nPurchase list is empty!");
         } else {
             System.out.println();
-            System.out.println(purchaseTypesWithAll);
+            System.out.println(purchaseTypesWithAllOption);
             int input = scanner.nextInt();
             while (showPurchaseData(input)) {
                 System.out.println();
-                System.out.println(purchaseTypesWithAll);
+                System.out.println(purchaseTypesWithAllOption);
+                input = scanner.nextInt();
             }
         }
     }
@@ -206,28 +202,28 @@ public class App {
                 System.out.println("\nFood:");
                 if (!checkIfEmpty(foodPurchases)) {
                     sum = printData(foodPurchases);
-                    System.out.println("Total sum: $" + sum);
+                    System.out.printf("Total sum: %.2f%n", sum);
                 }
                 break;
             case 2:
                 System.out.println("\nClothes");
                 if (!checkIfEmpty(clothesPurchases)) {
                     sum = printData(clothesPurchases);
-                    System.out.println("Total sum: $" + sum);
+                    System.out.printf("Total sum: $%.2f%n", sum);
                 }
                 break;
             case 3:
                 System.out.println("\nEntertainment:");
                 if (!checkIfEmpty(entertainmentPurchases)) {
                     sum = printData(entertainmentPurchases);
-                    System.out.println("Total sum: $" + sum);
+                    System.out.printf("Total sum: $%.2f%n", sum);
                 }
                 break;
             case 4:
                 System.out.println("\nOther:");
                 if (!checkIfEmpty(otherPurchases)) {
                     sum = printData(otherPurchases);
-                    System.out.println("Total sum: $" + sum);
+                    System.out.printf("Total sum: $%.2f%n", sum);
                 }
                 break;
             case 5:
@@ -236,7 +232,7 @@ public class App {
                 sum += printData(clothesPurchases);
                 sum += printData(entertainmentPurchases);
                 sum += printData(otherPurchases);
-                System.out.println("Total sum: $" + sum);
+                System.out.printf("Total sum: $%.2f%n", sum);
                 break;
             default:
                 return false;
@@ -255,7 +251,7 @@ public class App {
     private double printData(List<Item> list) {
         double sum = 0;
         for (Item item : list) {
-            System.out.println(item);
+            System.out.printf("%s $%.2f%n", item.getName(), item.getPrice());
             sum += item.getPrice();
         }
         return sum;
