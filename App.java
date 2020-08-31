@@ -16,6 +16,7 @@ public class App {
             "4) Balance\n" +
             "5) Save\n" +
             "6) Load\n" +
+            "7) Analyze (Sort)\n" +
             "0) Exit";
 
     private final Scanner scanner = new Scanner(System.in);
@@ -49,6 +50,9 @@ public class App {
                 break;
             case 6:
                 loadData();
+                break;
+            case 7:
+                analyze();
                 break;
             case 0:
                 System.out.println("\nBye!");
@@ -95,6 +99,11 @@ public class App {
             System.out.println("Error reading from the file: " + FILE_NAME);
             e.printStackTrace();
         }
+    }
+
+    private void analyze() {
+        Analyze analyze = new Analyze();
+        analyze.execute(purchaseLists);
     }
 
 }

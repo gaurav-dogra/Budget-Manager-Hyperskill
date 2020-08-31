@@ -1,6 +1,8 @@
 package budget;
 
-public class Item {
+import org.jetbrains.annotations.NotNull;
+
+public class Item implements Comparable<Item> {
     private final String name;
     private final double price;
 
@@ -22,4 +24,8 @@ public class Item {
         return name + "=" + price;
     }
 
+    @Override
+    public int compareTo(@NotNull Item item){
+        return Double.compare(item.getPrice(), this.getPrice());
+    }
 }

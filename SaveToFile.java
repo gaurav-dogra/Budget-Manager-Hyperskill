@@ -37,6 +37,5 @@ public class SaveToFile implements ISave {
             writer.newLine();
         }
         writer.close();
-        System.out.println("Purchases were saved!");
     }
 }
